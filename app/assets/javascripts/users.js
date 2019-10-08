@@ -7,15 +7,16 @@ $(document).on('turbolinks:load', function(){
   //Set Stripe public key.
   Stripe.setPublishableKey( $('meta[name="stripe-key"]').attr('content') );
   
-  //When user clicks form submit btn.
+  //When user clicks form submit btn,
   submitBtn.click(function(event){
+    
     //prevent default submission behavior.
     event.preventDefault();
     submitBtn.val("Processing").prop('disabled', true);
     
     //Collect the credit card fields.
     var ccNum = $('#card_number').val(),
-        cvcNum = $('card_code').val(),
+        cvcNum = $('#card_code').val(),
         expMonth = $('#card_month').val(),
         expYear = $('#card_year').val();
         
@@ -52,20 +53,16 @@ $(document).on('turbolinks:load', function(){
         exp_year: expYear
       }, stripeResponseHandler);
     }
-    
-    
-    
     return false;
+    
   });
   
   //Stripe will return a card token.
   function stripeResponseHandler(status, response) {
-    //Get the token from the response
+    //Get the token from the response.
     var token = response.id;
-    
-    //Inject the card token in a hidden field
+    //Inject the card token in a hidden field.
     theForm.append( $('<input type="hidden" name="user[stripe_card_token]">').val(token) );
-    
     //Submit form to our Rails app.
     theForm.get(0).submit();
   }
